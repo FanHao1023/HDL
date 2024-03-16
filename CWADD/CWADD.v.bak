@@ -1,0 +1,7 @@
+module CWADD
+
+ADD8 u0(8'd1,Q,S,cout);
+assign Y=(reset)?8'd0:S;
+always@(posedge btm)
+  Q<=Y;
+BtoBCD u1(Q,BCD1,BCD0
