@@ -1,0 +1,24 @@
+module Loopij_0_7(reset,clk,i,j);
+input clk, reset;
+output [3:0] i,j;
+reg [3:0] i,j;
+wire [3:0] ni,nj;
+
+always@(posedge clk)
+ begin
+  if(reset)
+   begin
+    i<=4'd0;
+    j<=4'd0;
+   end
+  else
+   begin
+	 i<=ni;
+	 j<=nj;
+	end 
+ end
+ 
+assign ni=(i>=4'd7)?i:(j>=4'd6)?i+1:i;
+assign nj=(i>=4'd6)?(i>=4'd7)?j:4'd0:j+1;
+
+endmodule 
