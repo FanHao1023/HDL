@@ -1,0 +1,21 @@
+module MulF_Reg (clk,reset,shCount,LR,RS,UpDown,Din,Q);
+input clk,reset,LR,RS,UpDown,shCount;
+output reg [7:0] Q;
+wire [7:0] nQ,nQ0,SL,SR,nCount,RL,RR,shD,RD,SD;
+
+always@(posedge clk)
+  Q<=nQ;
+
+assign nQ=(reset)?nQ0:Din;
+assign nCount=(UpDown)?Q+1:Q-1;
+assign SL={Q[6:0],1'b0};
+assign SR={1'b0,Q[7:1]};
+assign RL={Q[6:0],Q[7]};
+assign RR={Q[0],Q[7:1]};
+assign nQ0=(shCount)?shD:nCount;
+assign shD=(RS)RD:SD;
+assign RD=(LR)?RL:RR;
+assign SD=(LR)?SL:SR;
+
+endmodule
+
