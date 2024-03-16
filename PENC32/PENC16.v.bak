@@ -1,0 +1,13 @@
+module PENC16 (A,Y,z);
+input[15:0] A;
+output[3:0] Y;
+output z;
+wire [2:0] Y0,Y1;
+wire z0,z1;
+
+PENC8 u0(A[7:0],Y0,z0);
+PENC8 u1(A[15:7],Y1,z1);
+assign Y=z1?{1'b0,Y0}:{1'b1,Y1};
+assign z=z0&z1;
+
+endmodule
