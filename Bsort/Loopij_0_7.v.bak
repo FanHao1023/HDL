@@ -1,0 +1,11 @@
+module Loopij_0_7(reset,clk,i,j);
+input clk, reset;
+output [3:0] i,j;
+wire eni,enk,en;
+
+assign en= ((j==4'd6)&&(i==4'd7))?1'b0:1'b1; 
+
+loop_1 LU_j( clk, reset, 4'd6, 4'd0, en, eni, j);
+loop_1 LU_i( clk, reset, 4'd7, 4'd0, eni, enk, i);
+
+endmodule 

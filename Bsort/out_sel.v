@@ -1,0 +1,18 @@
+module out_sel (R0,R1,R2,R3,R4,R5,R6,R7,Addr,Dout);
+input [7:0] R0,R1,R2,R3,R4,R5,R6,R7;
+input [2:0] Addr;
+output reg [7:0]Dout;
+
+always@(*)
+  case(Addr)
+  3'd0:Dout<=R0;
+  3'd1:Dout<=R1;
+  3'd2:Dout<=R2;
+  3'd3:Dout<=R3;
+  3'd4:Dout<=R4;
+  3'd5:Dout<=R5;
+  3'd6:Dout<=R6;
+  3'd7:Dout<=R7;
+  endcase
+  
+endmodule 

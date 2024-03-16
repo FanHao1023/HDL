@@ -1,0 +1,25 @@
+module loop_1( clk, rst, UB, LB, en, en_n, i);
+input clk,rst,en;
+input [3:0] UB,LB;
+output reg [3:0] i;
+output en_n;
+wire cmpUB;
+reg [3:0] i_temp;
+
+always@(rst or en_n or en or LB or i)
+  begin
+   if(rst | en_n)
+    i_temp <= LB;
+   else if(en)
+    i_temp <= i + 4'b1;
+   else
+    i_temp <= i;
+  end 
+
+always@(posedge clk)
+  i <= i_temp;
+  
+assign cmpUB = (i >= UB)? 1'b1: 1'b0;
+assign en_n = cmpUB & en;
+
+endmodule 
