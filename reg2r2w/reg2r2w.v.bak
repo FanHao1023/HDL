@@ -1,0 +1,25 @@
+module reg2r2w(clk,DinA,DinB,AIndex,BIndex,w_en,Aout,Bout);
+input clk;
+input w_en;
+input[2:0] AIndex,BIndex;
+input[7:0] DinA,DinB;
+output[7:0] Aout,Bout;
+wire[7:0] dout0,dout1,dout2,dout3,dout4,dout5,dout6,dout7;
+wire[7:0] LEA,LEB;
+
+dec d0(AIndex,w_en,LEA);
+dec d1(BIndex,w_en,LEB);
+
+reg_cell r0(clk,LEA[0],LEB[0],DinA,DinB,dout0);
+reg_cell r1(clk,LEA[1],LEB[1],DinA,DinB,dout1);
+reg_cell r2(clk,LEA[2],LEB[2],DinA,DinB,dout2);
+reg_cell r3(clk,LEA[3],LEB[3],DinA,DinB,dout3);
+reg_cell r4(clk,LEA[4],LEB[4],DinA,DinB,dout4);
+reg_cell r5(clk,LEA[5],LEB[5],DinA,DinB,dout5);
+reg_cell r6(clk,LEA[6],LEB[6],DinA,DinB,dout6);
+reg_cell r7(clk,LEA[7],LEB[7],DinA,DinB,dout7);
+
+out_sel oa(Aindex,dout0,dout1,dout2,dout3,dout4,dout5,dout6,dout7,Aout);
+out_sel ob(Bindex,dout0,dout1,dout2,dout3,dout4,dout5,dout6,dout7,Bout);
+
+endmodule 
