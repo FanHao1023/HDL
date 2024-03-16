@@ -1,0 +1,25 @@
+module CSadder(a,b,cin,s,cout,ov);
+
+input [31:0] a,b;
+input cin;
+output [31:0] s;
+output cout,ov;
+
+wire c0,c1,c2;
+wire ov0,ov1,ov2;
+wire op1,op2,op3;
+
+ADD8 u1(a[7:0],b[7:0],cin,s[7:0],c0,ov0);
+ADD8 u2(a[15:8],b[15:8],0,s[15:8],c1,ov1);
+ADD8 u3(a[23:16],b[23:16],0,s[23:16],c2,ov2);
+ADD8 u4(a[31:24],b[31:24],0,s[31:24],cout,ov);
+ADD8 u5(a[15:8],b[15:8],1,s[15:8],c1,ov1);
+ADD8 u6(a[23:16],b[23:16],1,s[23:16],c2,ov2);
+ADD8 u7(a[31:24],b[31:24],1,s[31:24],cout,ov);
+
+assign op1=c0?u5:u2,
+       op2=c1?u6:u3,
+		 op3=c2?u7:u4;
+
+endmodule
+
