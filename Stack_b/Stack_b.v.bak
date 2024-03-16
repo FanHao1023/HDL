@@ -1,0 +1,27 @@
+module stack(Din,clk,reset,push_btn,pop_btn,Dout,empty,full,Top);
+input [7:0] Din;
+input clk,push_btn,pop_btn,reset;
+output reg[7:0] Dout;
+output empty,full;
+output reg[3:0] Top;
+reg [7:0] Buf[7:0];
+
+always @(negedge clk)
+  if( ~reset)
+    Top = 4'b1000;
+  else
+    if(push_btn==1'b0)
+      begin
+      Top = Top-1;
+      Buf[Top]=Din;
+      end
+    else
+      begin
+      Top =(pop_btn==1'b0)? Top+1: Top;
+      Dout= Buf[Top];
+    end
+	 
+assign full = ~(|Top);
+assign empty = Top[3];
+
+endmodule
