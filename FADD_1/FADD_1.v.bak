@@ -1,0 +1,30 @@
+module FADD_1 (A,B,X);
+input [31:0] A,B;
+output [31:0] X;
+wire SA,SB,SX;
+wire [31:0] _A,_B;
+wire [25:0]_FA,_FB,_FX,_FA1,_FB1,_FX1,_FX2;
+wire [22:0]FX,FA,FB;
+wire [7:0]EA,EB,EX;
+wire [4:0] Ed,Y;
+wire z;
+
+assign {SA,EA,FA}=A;
+assign {SB,EB,FB}=B;
+assign d=EA-EB;
+assign _FA={2'b01,FA};
+assign _FB={2'b01,FB}>>d;
+assign _FA1=SA?(~_FA+1):_FA;
+assign _FB1=SB?(~_FB+1):_FB;
+assign _FX1=_FA1+_FB1;
+assign SX=_FX1[25];
+assign _FX=SX?(~_FX1+1):_FX1;
+
+PENC32 u0(_FX,Y,z);
+assign Ed=5'd23-Y;
+assign _FX2=_FX<<Ed;
+assign EX=(_FX[24])?EA+1:(z?8'd0:EA-Ed);
+assign FX=(_FX[24])?_FX[23:1]:(z?23'd0:_FX2[22:0]);
+assign X={SX,EX,EF};
+
+endmodule
