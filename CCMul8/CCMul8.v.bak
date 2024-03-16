@@ -1,0 +1,86 @@
+module CCMul8(A,B,M);
+input[3:0] A,B;
+output[7:0] M;
+wire[3:0] m0,m1,m2,m3;
+wire[7:0] sa,sb;
+wire c0,c1,c2;
+
+assign m0=(B[0])?A:4'd0;
+assign m1=(B[1])?A:4'd0;
+assign m2=(B[2])?A:4'd0;
+assign m3=(B[3])?A:4'd0;
+ADD8 u0({4'd0,m0},{3'd0,m1,1'b0},1'b0,sa,c0);
+ADD8 u1({2'd0,m2,2'd0},{1'b0,m3,3'd0},1'b0,sb,c0);
+ADD8 u2(sa,sb,1'b0,M,c2);
+
+endmodule
+
+
+
+module CSADD16(a,b,ov,s,cout);
+
+input [15:0] a,b;
+input ov;
+output [15:0] s;
+output cout;
+wire [15:8] s10,s11;
+wire c0,c1,c2;
+wire cout0;
+
+ADD8 u0(a[7:0],b[7:0],ov,s[7:0],c0);
+ADD8 u10(a[15:8],b[15:8],ov,s10[15:8],c1);
+ADD8 u11(a[15:8],b[15:8],ov,s11[15:8],c2);
+assign cout0=(c0==1'b0)?c1:c2;
+assign s[15:8]=(c0==1'b0)?s10[15:8]:s11[15:8];
+
+endmodule
+
+
+
+
+module ADD4(a,b,cin,s,cout);
+
+input [3:0] a,b;
+input cin;
+output [3:0] s;
+output cout;
+wire [3:0] p,g;
+wire [3:0] c;
+
+assign p[0]=a[0]^b[0],
+       p[1]=a[1]^b[1],
+		 p[2]=a[2]^b[2],
+		 p[3]=a[3]^b[3];
+
+assign g[0]=a[0]&b[0],
+       g[1]=a[1]&b[1],
+		 g[2]=a[2]&b[2],
+		 g[3]=a[3]&b[3];
+
+assign c[0]=g[0]|(p[0]&cin),
+       c[1]=g[1]|(p[1]&g[0])|(p[1]&p[0]&cin),
+		 c[2]=g[2]|(p[2]&g[1])|(p[2]&p[1]&g[0])|(p[2]&p[1]&p[0]&cin),
+		 c[3]=g[3]|(p[3]&g[2])|(p[3]&p[2]&g[1])|(p[3]&p[2]&p[1]&g[0])|(p[3]&p[2]&p[1]&p[0]&cin);
+		 
+assign s[0]=p[0]^cin,
+       s[1]=p[1]^c[0],
+		 s[2]=p[2]^c[1],
+		 s[3]=p[3]^c[2];
+assign cout=c[3];
+
+endmodule
+
+
+
+module ADD8(a,b,cin,s,cout);
+
+input [7:0] a,b;
+input cin;
+output [7:0] s;
+output cout;
+wire c;
+
+ADD4 u0(a[3:0],b[3:0],cin,s[3:0],c);
+ADD4 u1(a[7:4],b[7:4],c,s[7:4],cout);
+
+endmodule
